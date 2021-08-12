@@ -1,0 +1,30 @@
+<div class="filters">
+  <div class="filters-head">
+    <h1>filters</h1>
+  </div>
+  <div class="filters-form">
+    <form [formGroup]="herosFiltersForm">
+      <div class="col">
+        <input type="text" class="form-control" formControlName="email" placeholder="Email" />
+      </div>
+
+      <div class="col">
+        <label for="country" class="form-label">Country</label>
+        <select id="country" class="form-control" name="country" formControlName="country">
+          <option [value]="''">{{'select country'}}</option>
+          <option *ngFor="let country of countriesList" [value]="country.Alpha3Code">{{country.Name}}</option>
+        </select>
+      </div>
+
+      <div class="col">
+        <label for="date" class="form-label">Date</label>
+        <input (click)="d.toggle();$event.stopPropagation();" [minDate]="today" navigation="arrows" class="form-control"
+          placeholder="yyyy-mm-dd" name="dp" formControlName="date" ngbDatepicker #d="ngbDatepicker">
+      </div>
+
+      <div class="col">
+        <button class="btn btn-lg btn-outline-primary filter" (click)="filter()">Filter</button>
+      </div>
+    </form>
+  </div>
+</div>
