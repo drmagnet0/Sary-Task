@@ -1,0 +1,24 @@
+* Points
+- UI
+- List table for all heros (name, phone, email, date, country, company)
+- Search in table
+- sort by (name, power)
+- filters is a sidebar with collaps and expand component
+- filters data is a dynamic will get it from fake services
+- filters need to contain 3 typs of inputs (text, dropdown, date)
+- country dropdown will display the name and update the filter with the Alpha3Code (EGP)
+- update and get search and filters to and from url
+
+● DOM manipulation using @ViewChild and other concepts. Try to avoid
+jQuery.
+● State Management with Angular, using NgRx or Akita.
+● Components
+● Component interaction
+● Pipes- inbuilt and custom pipes
+● Services
+● Directives- inbuilt and custom
+● Routing
+● Dependency Injection and how it is achieved in angular.
+● Modules
+● Event Binding
+● Unit tests
