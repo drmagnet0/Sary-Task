@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FiltersService } from '../../services/filters.service';
@@ -10,6 +10,7 @@ import { FiltersService } from '../../services/filters.service';
 })
 export class HerosFiltersComponent implements OnInit {
   herosFiltersForm: FormGroup;
+  filters;
   countriesList = [];
   today: NgbDateStruct;
 
@@ -19,9 +20,14 @@ export class HerosFiltersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getFilters();
     this.formInit();
     this.getCountries();
     this.setToday();
+  }
+
+  getFilters() {
+    this.filters = this.filtersService.filters();
   }
 
   formInit() {
