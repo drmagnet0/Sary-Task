@@ -69,8 +69,9 @@ export class HerosFiltersComponent implements OnInit {
       const values = Object.assign({}, params.params);
       if (values && values.Date) {
         values.Date = JSON.parse(values.Date);
+        console.log('after parse -> ', values.Date);
+        this.herosFiltersForm.patchValue(values);
       }
-      this.herosFiltersForm.patchValue(values);
     });
   }
 
@@ -84,7 +85,8 @@ export class HerosFiltersComponent implements OnInit {
   }
 
   filter() {
-    const values = this.herosFiltersForm.value;
+    const values = this.filtersService.cleanObject(this.herosFiltersForm.value);
+    console.log('emit -> ', values);
     this.update.emit(values);
   }
 }
