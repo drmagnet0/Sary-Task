@@ -2,11 +2,11 @@
   <div class="row">
 
     <div class="col-lg-3">
-      <app-heros-filters></app-heros-filters>
+      <app-heros-filters (update)="applyFilters($event)"></app-heros-filters>
     </div>
 
     <div class="col-lg-9">
-      <app-heros-list></app-heros-list>
+      <app-heros-list [filters]="filters"></app-heros-list>
     </div>
 
   </div>

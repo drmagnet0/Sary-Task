@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { map } from 'rxjs/operators';
 import { FiltersService } from '../../services/filters.service';
 
 @Component({
@@ -13,60 +15,76 @@ export class HerosFiltersComponent implements OnInit {
   filters;
   countriesList = [];
   today: NgbDateStruct;
+  @Output() update = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
-    private filtersService: FiltersService
+    private filtersService: FiltersService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.getFilters();
-    this.formInit();
-    this.getCountries();
     this.setToday();
   }
 
   getFilters() {
     this.filters = this.filtersService.filters();
+    this.formInit(this.filters);
   }
 
-  formInit() {
-    this.herosFiltersForm = this.fb.group({
-      email: [''],
-      country: ['EGY'],
-      date: [''],
-    });
+  formInit(inputs) {
+    this.herosFiltersForm = this.fb.group({});
+    for (let index = 0; index < inputs.length; index++) {
+      const input = inputs[index];
+      this.herosFiltersForm.addControl(input.title, new FormControl(''));
+      if (input.type === 'dropdown') {
+        this.getData(index, input.api);
+      }
+    }
+    this.readUrl();
   }
 
-  getCountries() {
-    this.filtersService.countries().subscribe((list) => {
-      this.countriesList = list;
+  getData(index, apiUrl) {
+    this.filtersService
+      .data(apiUrl)
+      .pipe(
+        map((response: any) => response.Response),
+        map((list) => {
+          return list.map((c) => {
+            return {
+              Name: c.Name,
+              Alpha3Code: c.Alpha3Code,
+            };
+          });
+        })
+      )
+      .subscribe((data) => {
+        this.filters[index].data = data;
+      });
+  }
+
+  readUrl() {
+    this.route.queryParamMap.subscribe((params: any) => {
+      const values = Object.assign({}, params.params);
+      if (values && values.Date) {
+        values.Date = JSON.parse(values.Date);
+      }
+      this.herosFiltersForm.patchValue(values);
     });
   }
 
   setToday() {
     const todat = new Date();
     this.today = {
-      /**
-       * The year, for example 2016
-       */
       year: todat.getFullYear(),
-      /**
-       * The month, for example 1=Jan ... 12=Dec
-       */
       month: todat.getMonth() + 1,
-      /**
-       * The day of month, starting at 1
-       */
       day: todat.getDay(),
     };
   }
 
   filter() {
-    if (this.herosFiltersForm.valid) {
-      console.log(this.herosFiltersForm.value);
-    } else {
-      console.log(this.herosFiltersForm.value);
-    }
+    const values = this.herosFiltersForm.value;
+    this.update.emit(values);
   }
 }

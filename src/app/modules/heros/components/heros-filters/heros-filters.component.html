@@ -4,23 +4,44 @@
   </div>
   <div class="filters-form">
     <form [formGroup]="herosFiltersForm">
-      <div class="col">
-        <input type="text" class="form-control" formControlName="email" placeholder="Email" />
-      </div>
 
-      <div class="col">
-        <label for="country" class="form-label">Country</label>
-        <select id="country" class="form-control" name="country" formControlName="country">
-          <option [value]="''">{{'select country'}}</option>
-          <option *ngFor="let country of countriesList" [value]="country.Alpha3Code">{{country.Name}}</option>
-        </select>
-      </div>
+      <ng-container *ngFor="let input of filters">
 
-      <div class="col">
-        <label for="date" class="form-label">Date</label>
-        <input (click)="d.toggle();$event.stopPropagation();" [minDate]="today" navigation="arrows" class="form-control"
-          placeholder="yyyy-mm-dd" name="dp" formControlName="date" ngbDatepicker #d="ngbDatepicker">
-      </div>
+        <!-- Input type text -->
+        <div class="col" *ngIf="input.type === 'text'">
+          <input type="text" class="form-control" [formControlName]="input.title" [name]="input.title"
+            [placeholder]="input.title" />
+        </div>
+        <!-- Input type text -->
+
+        <!-- Input type dropdown -->
+        <div class="col" *ngIf="input.type === 'dropdown'">
+          <label [for]="input.title" class="form-label">{{input.title}}</label>
+          <select [id]="input.title" class="form-control" [name]="input.title" [formControlName]="input.title"
+            [multiple]="input.multiple">
+            <option [value]="''">{{'select ' + input.title}}</option>
+            <option *ngFor="let country of input.data" [value]="country.Alpha3Code">{{country.Name}}
+            </option>
+          </select>
+        </div>
+        <!-- Input type dropdown -->
+
+        <!-- Input type date -->
+        <div class="col" *ngIf="input.type === 'date'">
+          <label [for]="input.title" class="form-label">{{input.title}}</label>
+          <input (click)="d.toggle();$event.stopPropagation();" [minDate]="today" navigation="arrows"
+            class="form-control" placeholder="yyyy-mm-dd" name="dp" [formControlName]="input.title" ngbDatepicker
+            #d="ngbDatepicker">
+        </div>
+        <!-- Input type date -->
+
+      </ng-container>
+
+
+
+
+
+
 
       <div class="col">
         <button class="btn btn-lg btn-outline-primary filter" (click)="filter()">Filter</button>
