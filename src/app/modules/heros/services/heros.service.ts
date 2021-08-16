@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
+import heros from './../../../../assets/heros.json';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HerosService {
+  constructor() {}
 
-  constructor() { }
+  heros() {
+    return heros.heros;
+  }
 }

@@ -20,11 +20,11 @@ export class HerosComponent implements OnInit {
 
   getFilters(filters) {
     if (filters && filters.Date) {
-      console.log('before stringify -> ', filters.Date);
       const values = this.filtersService.cleanObject(
         Object.assign({}, filters)
       );
       values.Date = JSON.stringify(values.Date);
+      this.filters = values;
       this.updateUrl(values);
     }
   }
