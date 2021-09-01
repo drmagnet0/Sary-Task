@@ -67,12 +67,18 @@ export class HerosFiltersComponent implements OnInit {
   readUrl() {
     this.route.queryParamMap.subscribe((params: any) => {
       const values = Object.assign({}, params.params);
-      if (values && values.Date) {
-        values.Date = JSON.parse(values.Date);
-        console.log('after parse -> ', values.Date);
-        this.herosFiltersForm.patchValue(values);
+      if (values) {
+        this.setFilters(values);
+        this.filter();
       }
     });
+  }
+
+  setFilters(filters) {
+    if (filters.Date) {
+      filters.Date = JSON.parse(filters.Date);
+    }
+    this.herosFiltersForm.patchValue(filters);
   }
 
   setToday() {
@@ -87,6 +93,7 @@ export class HerosFiltersComponent implements OnInit {
   filter() {
     const values = this.filtersService.cleanObject(this.herosFiltersForm.value);
     console.log('emit -> ', values);
+
     this.update.emit(values);
   }
 }

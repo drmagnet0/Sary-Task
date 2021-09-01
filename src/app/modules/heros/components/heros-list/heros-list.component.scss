@@ -1,0 +1,39 @@
+.table {
+  background-color: white;
+  thead {
+    tr {
+      background-color: #f7f8f9;
+      th {
+        padding: 20px;
+        text-transform: capitalize;
+        color: #9fa5b1;
+        border: 0;
+        font-weight: bold;
+        font-size: 18px;
+        font-family: monospace;
+        cursor: pointer;
+        &:not(:last-child) {
+          border-right: 2pt solid #eceff2;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding: 20px;
+        text-transform: capitalize;
+        color: #73757c;
+        border: 0;
+        font-weight: bold;
+        font-size: 18px;
+        font-family: monospace;
+        &.email {
+          color: #94b2ff;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

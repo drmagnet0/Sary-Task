@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import {
   HerosListComponent,
   NgbdSortableHeader,
@@ -27,5 +27,6 @@ import { Hero } from './models/hero';
     HttpClientModule,
     NgbModule,
   ],
+  providers: [DatePipe],
 })
 export class HerosModule {}

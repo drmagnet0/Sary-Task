@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   Directive,
@@ -47,13 +48,17 @@ export class HerosListComponent implements OnInit {
   heros: Hero[];
   herosCopy: Hero[];
   herosFilters;
-  @Input() set filters(value) {
-    if (value) {
-      this.herosFilters = value;
+  @Input() set filters(values) {
+    if (values) {
+      if (values.Date) {
+        values.Date = JSON.parse(values.Date);
+      }
+      this.herosFilters = values;
+      this.onFilter(this.herosFilters);
     }
   }
 
-  constructor(private herosService: HerosService) {}
+  constructor(private herosService: HerosService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.getHeros();
@@ -62,6 +67,9 @@ export class HerosListComponent implements OnInit {
   getHeros() {
     this.heros = this.herosService.heros();
     this.herosCopy = this.heros;
+    if (this.herosFilters) {
+      this.onFilter(this.herosFilters);
+    }
   }
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
@@ -83,5 +91,37 @@ export class HerosListComponent implements OnInit {
         return direction === 'asc' ? res : -res;
       });
     }
+  }
+
+  onFilter(filters) {
+    console.log(filters);
+    if (this.heros) {
+      if (!Object.keys(filters).length) {
+        this.heros = this.herosCopy;
+        return;
+      }
+      this.heros = [...this.herosCopy].filter((hero) => {
+        for (const key in filters) {
+          if (Object.prototype.hasOwnProperty.call(filters, key)) {
+            let filterVal = filters[key];
+            let heroVal = hero[key.toLowerCase()];
+            console.log(key, filterVal, heroVal);
+            if (key === 'Date') {
+              filterVal = this.fixDate(filterVal);
+            }
+            console.log(key, filterVal, heroVal);
+            if (heroVal.toLowerCase().includes(filterVal.toLowerCase())) {
+              return true;
+            }
+          }
+        }
+        return false;
+      });
+    }
+  }
+
+  fixDate(date) {
+    const d = new Date(date.year, date.month - 1, date.day);
+    return this.datePipe.transform(d, 'yyyy-MM-dd');
   }
 }
